@@ -1,0 +1,36 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: api-cqrs-gateway
+
+  main:
+    web-application-type: reactive
+
+  cloud:
+    gateway:
+      httpclient:
+        wiretap: true
+      httpserver:
+        wiretap: true
+
+      routes:
+        - id: rota1
+          uri: http://localhost:8882
+          predicates:
+            - Path=/api-cqrs-query/v1/query/**
+
+        - id: rota2
+          uri: http://localhost:8881
+          predicates:
+            - Path=/api-cqrs-command/v1/command/**
+
+logging:
+  level:
+    reactor:
+      netty: INFO
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
